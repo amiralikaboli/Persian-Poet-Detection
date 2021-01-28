@@ -1,4 +1,5 @@
 import json
+import random
 import re
 
 import pandas as pd
@@ -115,12 +116,23 @@ if __name__ == '__main__':
     frequent_poets = [poet for poet in poets_freq.keys() if poets_freq[poet] > threshold]
     poet2index = {poet: ind for ind, poet in enumerate(sorted(frequent_poets))}
 
-    selected_units = {}
+    with open('data/poet2index.json', 'w') as json_file:
+        json.dump(poet2index, json_file, ensure_ascii=False)
+
+    selected_units = []
     for unit in units:
         poet = unit['cat'].split('____')[0]
 
-        if poet in frequent_poets:
-            selected_units[unit['text']] = poet2index[poet]
+        if poet in frequent_poets and isinstance(unit['text'], str):
+            selected_units.append((unit['text'], poet2index[poet]))
 
-    with open('data/selected_multiple_beits.json', 'w') as json_file:
-        json.dump(selected_units, json_file, ensure_ascii=False)
+    test_frac = 0.2
+    test_set_size = int(len(selected_units) * test_frac)
+    random.shuffle(selected_units)
+    train_set = selected_units[test_set_size:]
+    test_set = selected_units[:test_set_size]
+
+    with open('data/train.json', 'w') as json_file:
+        json.dump(train_set, json_file, ensure_ascii=False)
+    with open('data/test.json', 'w') as json_file:
+        json.dump(test_set, json_file, ensure_ascii=False)
