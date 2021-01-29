@@ -24,9 +24,12 @@ class DataProvider:
         final_fields = ['poem_id', 'vorder', 'position', 'text', 'cat']
         mesras = []
         for line_ind in range(data_csv.shape[0]):
-            mesra = {field: data_csv[field][0] for field in final_fields}
-            mesra['text'] = self.text_cleaner.clean(mesra['text'])
-            mesras.append(mesra)
+            try:
+                mesra = {field: data_csv[field][line_ind] for field in final_fields}
+                mesra['text'] = self.text_cleaner.clean(mesra['text'])
+                mesras.append(mesra)
+            except:
+                pass
 
         return mesras
 
@@ -94,7 +97,7 @@ if __name__ == '__main__':
     data_csv = pd.read_csv('data/ganjoor.csv', delimiter='\t', dtype=str)
 
     provider = DataProvider()
-    units = provider.provide_multiple_beits(data_csv, 2)
+    units = provider.provide_multiple_beits(data_csv, k=4)
 
     with open('data/multiple_beits.json', 'w') as json_file:
         json.dump(units, json_file, ensure_ascii=False)
@@ -112,7 +115,7 @@ if __name__ == '__main__':
     with open('data/poets_freq.json', 'w') as json_file:
         json.dump(poets_freq, json_file, ensure_ascii=False)
 
-    threshold = 10000
+    threshold = 7000
     frequent_poets = [poet for poet in poets_freq.keys() if poets_freq[poet] > threshold]
     poet2index = {poet: ind for ind, poet in enumerate(sorted(frequent_poets))}
 
