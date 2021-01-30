@@ -1,0 +1,8 @@
+{
+    "hidden_size": 64,
+    "num_layers": 1,
+    "batch_size": 1,
+    "lr": 1e-3,
+    "num_epochs": 100,
+    "val_frac": 0.15
+}

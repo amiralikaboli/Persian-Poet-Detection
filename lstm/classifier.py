@@ -34,14 +34,8 @@ class PoetClassifier(torch.nn.Module):
 if __name__ == '__main__':
     now_datetime = datetime.now()
 
-    hyper_parameters = {
-        "hidden_size": 64,
-        "num_layers": 1,
-        "batch_size": 1,
-        "lr": 1e-3,
-        "num_epochs": 100,
-        "val_frac": 0.15
-    }
+    with open('hyper_parameters.json', 'r') as json_file:
+        hyper_parameters = json.load(json_file)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
