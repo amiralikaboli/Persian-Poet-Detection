@@ -1,9 +1,9 @@
 import json
 
 if __name__ == '__main__':
-    with open('../data/train.json', 'r') as json_file:
+    with open('../data/balanced_train.json', 'r') as json_file:
         train_set = json.load(json_file)
-    with open('../data/test.json', 'r') as json_file:
+    with open('../data/balanced_test.json', 'r') as json_file:
         test_set = json.load(json_file)
 
     fasttext_train_set = []
